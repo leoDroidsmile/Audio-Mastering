@@ -2,12 +2,16 @@
 # Imports
 #----------------------------------------------------------------------------#
 
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request, send_file
 # from flask.ext.sqlalchemy import SQLAlchemy
 import logging
 from logging import Formatter, FileHandler
 from forms import *
+from pathlib import Path
 import os
+from werkzeug.utils import secure_filename
+
+import mastering as mg
 
 #----------------------------------------------------------------------------#
 # App Config.
@@ -15,6 +19,9 @@ import os
 
 app = Flask(__name__)
 app.config.from_object('config')
+
+UPLOAD_DIR = 'uploads'
+MASTERED_DIR = 'mastered'
 #db = SQLAlchemy(app)
 
 # Automatically tear down SQLAlchemy.
@@ -69,6 +76,44 @@ def forgot():
     return render_template('forms/forgot.html', form=form)
 
 # Error handlers.
+
+
+
+# Audio Handler #
+
+@app.route('/upload')
+def render_upload_form():
+   return render_template('forms/upload.html')
+	
+@app.route('/uploader', methods = ['GET', 'POST'])
+def upload_file():
+   if request.method == 'POST':
+      f = request.files['file']
+      target_file_name = secure_filename(f.filename)
+
+      if not Path(UPLOAD_DIR).exists():
+          os.mkdir(UPLOAD_DIR)
+      if not Path(MASTERED_DIR).exists():
+          os.mkdir(MASTERED_DIR)
+
+      target_file_path = f'{UPLOAD_DIR}/{target_file_name}'
+      f.save(target_file_path)
+
+      mastered_file_path = f'{MASTERED_DIR}/mastered_{target_file_name}'
+
+      mg.process(
+        # The track you want to master
+        target= target_file_path,
+
+        # Some "wet" reference track
+        characteristics='characteristics.db',
+
+        # Where and how to save your results
+        results=[
+            mg.pcm16(mastered_file_path),
+        ]
+      )
+      return send_file(target_file_path, as_attachment=True, attachment_filename=target_file_name)
 
 
 @app.errorhandler(500)

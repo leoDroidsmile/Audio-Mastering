@@ -1,4 +1,6 @@
 *.pyc
 .DS_Store
 env
-venv
+ven
+/uploads
+/mastered
