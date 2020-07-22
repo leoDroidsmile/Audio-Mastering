@@ -18,7 +18,6 @@ import numpy as np
 
 from .log import Code, info, debug, debug_line
 from .dsp import size, strided_app_2d, batch_rms_2d, fade, clip
-import soundfile as sf
 from datetime import timedelta
 
 from .log import debug
