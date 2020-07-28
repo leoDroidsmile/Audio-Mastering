@@ -99,11 +99,10 @@ def upload_file():
       target_file_path = f'{UPLOAD_DIR}/{target_file_name}'
       f.save(target_file_path)
 
-      mastered_file_path = f'{MASTERED_DIR}/mastered_{target_file_name}'
-
       style = request.form.get("style")
       intensity = request.form.get("intensity")
       
+      mastered_file_path = f'{MASTERED_DIR}/{intensity}_{style}_{target_file_name}'
 
       mg.process(
         # The track you want to master
@@ -120,7 +119,7 @@ def upload_file():
             mg.pcm16(mastered_file_path),
         ]
       )
-      return send_file(target_file_path, as_attachment=True, attachment_filename=target_file_name)
+      return send_file(mastered_file_path, as_attachment=True)
 
 
 @app.errorhandler(500)
