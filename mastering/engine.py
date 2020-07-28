@@ -131,9 +131,13 @@ def __load_with_ffmpeg(file: str, file_type: str, temp_folder: str) -> (np.ndarr
     return sound, sample_rate
 
 
+DATABASE = 'database'
+
 def process(
         target: str,
         characteristics: str,
+        style : str,
+        intensity : str,
         results: list,
         config: Config = Config(),
         preview_target: Export = None,
@@ -158,7 +162,10 @@ def process(
     reference, reference_sample_rate = load(characteristics, 'reference', temp_folder)
     # Analyze the reference
     reference_sample_rate = 44100
-    f_reference = open("reference.txt", "rb")
+
+    database = f'{DATABASE}/{style}-{intensity}.txt'
+
+    f_reference = open(database, "rb")
     zipped = f_reference.read()
     f_reference.close()
     serialized = zlib.decompress(zipped)

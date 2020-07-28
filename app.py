@@ -101,12 +101,19 @@ def upload_file():
 
       mastered_file_path = f'{MASTERED_DIR}/mastered_{target_file_name}'
 
+      style = request.form.get("style")
+      intensity = request.form.get("intensity")
+      
+
       mg.process(
         # The track you want to master
         target= target_file_path,
 
         # Some "wet" reference track
         characteristics='characteristics.db',
+
+        style = style,
+        intensity = intensity,
 
         # Where and how to save your results
         results=[
