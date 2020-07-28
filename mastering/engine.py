@@ -159,7 +159,7 @@ def process(
     target, target_sample_rate = check(target, target_sample_rate, config, 'target')
 
     # Load the reference
-    reference, reference_sample_rate = load(characteristics, 'reference', temp_folder)
+    # reference, reference_sample_rate = load(characteristics, 'reference', temp_folder)
     # Analyze the reference
     reference_sample_rate = 44100
 
