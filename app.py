@@ -104,6 +104,8 @@ def upload_file():
       
       mastered_file_path = f'{MASTERED_DIR}/{intensity}_{style}_{target_file_name}'
 
+      mg.log(print)
+
       mg.process(
         # The track you want to master
         target= target_file_path,
